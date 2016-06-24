@@ -1,0 +1,26 @@
+.react-radial {
+    background-color: #ddd;
+    position: relative;
+
+    .center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 3px;
+        height: 3px;
+        transform: translate(-50%, -50%);
+        border-radius: 5px;
+        background-color: #000;
+        pointer-events: none;
+    }
+
+    .point {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 5px;
+        border: 2px solid #000;
+        pointer-events: none;
+    }
+}
