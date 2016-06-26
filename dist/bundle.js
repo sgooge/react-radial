@@ -19825,6 +19825,14 @@ var Radial = React.createClass({
             x: x,
             y: y
         });
+
+        var maxValue = this.props.maxValue ? this.props.maxValue : this.state.radius * 2,
+            actualx = maxValue * (x / this.state.radius - 1),
+            roundedx = Math.round(actualx * 100) / 100,
+            actualy = maxValue * (y / this.state.radius - 1),
+            roundedy = Math.round(actualy * 100) / 100;
+
+        this.props.onChange(roundedx, roundedy);
     },
 
     render: function render() {
