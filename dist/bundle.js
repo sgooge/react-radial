@@ -19702,8 +19702,8 @@ var Main = React.createClass({
 
     getInitialState: function getInitialState() {
         return {
-            radialx: 30,
-            radialy: 30
+            radialx: 0,
+            radialy: 0
         };
     },
     onRadialChange: function onRadialChange(x, y) {
@@ -19764,15 +19764,26 @@ var Radial = React.createClass({
     },
 
     componentWillMount: function componentWillMount() {
-        var radius = 100 / 2;
+        var radius = 100 / 2,
+            x,
+            y;
         if (this.props.width) {
             radius = this.props.width / 2;
         }
 
+        if (this.props.currentPos) {
+            var maxValue = this.props.maxValue ? this.props.maxValue : this.state.radius * 2;
+            x = (this.props.currentPos.x / maxValue + 1) * radius;
+            y = (this.props.currentPos.y / maxValue + 1) * radius;
+        } else {
+            x = radius;
+            y = radius;
+        }
+
         this.setState({
             radius: radius,
-            x: radius,
-            y: radius
+            x: x,
+            y: y
         });
     },
     componentWillReceiveProps: function componentWillReceiveProps(newProps) {

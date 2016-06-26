@@ -14,7 +14,7 @@ var Radial = React.createClass({
         onChange: React.PropTypes.func
     },
 
-    getInitialState: function (){
+    getInitialState: function () {
         return {
             radius: 0,
             x: 0,
@@ -23,19 +23,29 @@ var Radial = React.createClass({
     },
 
     componentWillMount: function () {
-        var radius = 100 / 2;
-        if(this.props.width) {
+        var radius = 100 / 2,
+            x, y;
+        if (this.props.width) {
             radius = this.props.width / 2;
+        }
+
+        if (this.props.currentPos) {
+            var maxValue = this.props.maxValue ? this.props.maxValue : this.state.radius * 2;
+            x = (this.props.currentPos.x / maxValue + 1) * radius;
+            y = (this.props.currentPos.y / maxValue + 1) * radius;
+        } else {
+            x = radius;
+            y = radius;
         }
 
         this.setState({
             radius: radius,
-            x: radius,
-            y: radius
+            x: x,
+            y: y
         });
     },
     componentWillReceiveProps: function (newProps) {
-        if(newProps.width != this.props.width) {
+        if (newProps.width != this.props.width) {
             this.setState({
                 radius: newProps.width / 2
             });
@@ -73,10 +83,10 @@ var Radial = React.createClass({
             boundx = this.state.radius + this.state.radius * Math.cos(angle),
             boundy = this.state.radius + this.state.radius * Math.sin(angle);
 
-        if((x > boundx && x > this.state.radius) || (x < boundx && x < this.state.radius)) {
+        if ((x > boundx && x > this.state.radius) || (x < boundx && x < this.state.radius)) {
             x = boundx;
         }
-        if((y > boundy && y > this.state.radius) || (y < boundy && y < this.state.radius)) {
+        if ((y > boundy && y > this.state.radius) || (y < boundy && y < this.state.radius)) {
             y = boundy;
         }
 
@@ -108,8 +118,8 @@ var Radial = React.createClass({
         };
 
         return (
-            <div 
-                className="react-radial" 
+            <div
+                className="react-radial"
                 style={radialStyle}
                 onMouseDown={this.onMouseDown}>
                 <div className="center"></div>

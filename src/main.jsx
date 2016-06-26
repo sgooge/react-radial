@@ -7,8 +7,8 @@ var Radial = require('./reactRadial.jsx');
 var Main = React.createClass({
     getInitialState: function () {
         return {
-            radialx: 30,
-            radialy: 30
+            radialx: 0,
+            radialy: 0
         }
     },
     onRadialChange: function (x, y) {
