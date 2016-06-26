@@ -29,7 +29,9 @@ var Radial = React.createClass({
         }
 
         this.setState({
-            radius: radius
+            radius: radius,
+            x: radius,
+            y: radius
         });
     },
     componentWillReceiveProps: function (newProps) {
@@ -62,9 +64,25 @@ var Radial = React.createClass({
     },
 
     setPoint: function (clientX, clientY) {
+        var x = clientX - this.elmPos.left,
+            y = clientY - this.elmPos.top;
+
+        var diffx = x - this.state.radius,
+            diffy = y - this.state.radius,
+            angle = Math.atan2(diffy, diffx),
+            boundx = this.state.radius + this.state.radius * Math.cos(angle),
+            boundy = this.state.radius + this.state.radius * Math.sin(angle);
+
+        if((x > boundx && x > this.state.radius) || (x < boundx && x < this.state.radius)) {
+            x = boundx;
+        }
+        if((y > boundy && y > this.state.radius) || (y < boundy && y < this.state.radius)) {
+            y = boundy;
+        }
+
         this.setState({
-            x: clientX - this.elmPos.left,
-            y: clientY - this.elmPos.top
+            x: x,
+            y: y
         });
     },
 

@@ -19697,7 +19697,44 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Radial = require('./reactRadial.jsx');
 
-ReactDOM.render(React.createElement(Radial, { width: 300, maxValue: 255 }), document.getElementById('app'));
+var Main = React.createClass({
+    displayName: 'Main',
+
+    getInitialState: function getInitialState() {
+        return {
+            radialx: 30,
+            radialy: 30
+        };
+    },
+    onRadialChange: function onRadialChange(x, y) {
+        this.setState({
+            radialx: x,
+            radialy: y
+        });
+    },
+
+    render: function render() {
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(Radial, {
+                width: 300,
+                maxValue: 255,
+                currentPos: { x: this.state.radialx, y: this.state.radialy },
+                onChange: this.onRadialChange }),
+            React.createElement(
+                'div',
+                null,
+                'Output: ',
+                this.state.radialx,
+                ', ',
+                this.state.radialy
+            )
+        );
+    }
+});
+
+ReactDOM.render(React.createElement(Main, null), document.getElementById('app'));
 
 },{"./reactRadial.jsx":169,"react":167,"react-dom":2}],169:[function(require,module,exports){
 "use strict";
@@ -19733,7 +19770,9 @@ var Radial = React.createClass({
         }
 
         this.setState({
-            radius: radius
+            radius: radius,
+            x: radius,
+            y: radius
         });
     },
     componentWillReceiveProps: function componentWillReceiveProps(newProps) {
@@ -19766,9 +19805,25 @@ var Radial = React.createClass({
     },
 
     setPoint: function setPoint(clientX, clientY) {
+        var x = clientX - this.elmPos.left,
+            y = clientY - this.elmPos.top;
+
+        var diffx = x - this.state.radius,
+            diffy = y - this.state.radius,
+            angle = Math.atan2(diffy, diffx),
+            boundx = this.state.radius + this.state.radius * Math.cos(angle),
+            boundy = this.state.radius + this.state.radius * Math.sin(angle);
+
+        if (x > boundx && x > this.state.radius || x < boundx && x < this.state.radius) {
+            x = boundx;
+        }
+        if (y > boundy && y > this.state.radius || y < boundy && y < this.state.radius) {
+            y = boundy;
+        }
+
         this.setState({
-            x: clientX - this.elmPos.left,
-            y: clientY - this.elmPos.top
+            x: x,
+            y: y
         });
     },
 
